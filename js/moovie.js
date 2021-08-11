@@ -256,6 +256,15 @@ class Moovie {
             cancelable: false
         });
 
+        // Control Panel toggle
+        var togglecontrolpanel = new CustomEvent("togglecontrolpanel", {
+            detail: {
+                show: false
+            },
+            bubbles: false,
+            cancelable: false
+        });
+
         /*
          ** Main throttle function
          */
@@ -552,7 +561,7 @@ class Moovie {
         }
 
         /*
-         ** Formar player time
+         ** Format player time
          */
         function player_time(secs) {
             var t = new Date(1970, 0, 1);
@@ -710,6 +719,8 @@ class Moovie {
                     Submenu("CAll");
                     document.getElementById("moovie__controls_" + randomID).style.opacity = 0;
                     document.getElementById("caption_track_" + randomID).style.marginBottom = "0px";
+                    togglecontrolpanel.detail.show = false;
+                    _this.video.dispatchEvent(togglecontrolpanel);
                 }
             } else if (order == "open") {
 
@@ -717,6 +728,8 @@ class Moovie {
                 if (fullyloaded == 1) {
                     document.getElementById("caption_track_" + randomID).style.marginBottom = "40px";
                     document.getElementById("moovie__controls_" + randomID).style.opacity = 1;
+                    togglecontrolpanel.detail.show = true;
+                    _this.video.dispatchEvent(togglecontrolpanel);
                 }
             }
         }

@@ -387,13 +387,21 @@ class Moovie {
             // Remove poster background.
             document.getElementById("poster_layer_" + randomID).style.backgroundImage = "none";
             if (video.paused == true) {
-                video.play();
+                if (androidOrIOS == 'ios') {
+                    document.getElementById(selector).controller.play();
+                } else {
+                    video.play();
+                }
                 document.getElementById("moovie_bplay_play_" + randomID).style.display = "none";
                 document.getElementById("moovie_bplay_pause_" + randomID).style.display = "inherit";
                 togglePoster("hide");
                 ChangeTooltip("play_button", 1);
             } else {
-                video.pause();
+                if (androidOrIOS == 'ios') {
+                    document.getElementById(selector).controller.pause();
+                } else {
+                    video.pause();
+                }
                 document.getElementById("moovie_bplay_play_" + randomID).style.display = "inherit";
                 document.getElementById("moovie_bplay_pause_" + randomID).style.display = "none";
                 togglePoster("show");
@@ -408,10 +416,14 @@ class Moovie {
             switch (order) {
                 case "toggleFullscreen":
 
+                    let videoEle = document.getElementById(selector);
+
                     if (moovie_el_player.requestFullscreen) {
                         moovie_el_player.requestFullscreen();
-                    } else if (moovie_el_player.webkitRequestFullscreen) { // Safari
-                        moovie_el_player.webkitRequestFullscreen();
+                    } else if (videoEle.webkitRequestFullscreen) { // Safari
+                        videoEle.webkitRequestFullscreen();
+                    } else if (videoEle.webkitEnterFullScreen) { // Safari
+                        videoEle.webkitEnterFullScreen();
                     } else if (moovie_el_player.msRequestFullscreen) { // IE11
                         moovie_el_player.msRequestFullscreen();
                     }
@@ -421,8 +433,8 @@ class Moovie {
                     if (1 >= outerHeight - innerHeight) {
                         if (document.exitFullscreen) {
                             document.exitFullscreen();
-                        } else if (document.webkitExitFullscreen) { // Safari
-                            document.webkitExitFullscreen();
+                        } else if (videoEle.webkitExitFullscreen) { // Safari
+                            videoEle.webkitExitFullscreen();
                         } else if (document.msExitFullscreen) { // IE11
                             document.msExitFullscreen();
                         }
@@ -1372,8 +1384,8 @@ class Moovie {
                 if (androidOrIOS() == "ios") {
                     // Since iOs doesnt support Fullscreen and Volume changes, let's hide it
                     this.moovie_el_volume.style.display = "none";
-                    fullscreen.style.display = "none";
-                    video.style.transformStyle = "preserve-3d";
+                    // fullscreen.style.display = "none";
+                    // video.style.transformStyle = "preserve-3d";
                 }
 
                 // Touch related eventListeners
